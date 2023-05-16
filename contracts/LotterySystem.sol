@@ -4,8 +4,14 @@
 pragma solidity ^0.8.0;
 
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-// import "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
 import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
+
+// We are not using this in here, but we need to have it so that HardHat will generator an artifact for it.
+// See https://ethereum.stackexchange.com/questions/114376/how-to-compile-external-contracts-using-hardhat
+import "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
+import "@chainlink/contracts/src/v0.8/tests/MockV3Aggregator.sol";
+import "@chainlink/contracts/src/v0.4/LinkToken.sol";
+import "@chainlink/contracts/src/v0.8/VRFV2Wrapper.sol";
 
 // Switch this to your own contract address once deployed, for bookkeeping!
 // Example Contract Address on Goerli: 0xDBa03676a2fBb6711CB652beF5B7416A53c1421D
@@ -82,7 +88,7 @@ contract LotterySystem is VRFV2WrapperConsumerBase {
     // while a winner is actively being chosen.
     bool lotteryInitiated;
 
-    constructor() VRFV2WrapperConsumerBase(linkToken, vrfCoordinatorWrapper) {
+    constructor(address _linkToken, address _vrfCoordinatorWrapper) VRFV2WrapperConsumerBase(_linkToken, _vrfCoordinatorWrapper) {
         // Store the address of the deployer as a payable address.
         // When we withdraw funds, we'll withdraw here.
         owner = payable(msg.sender);
