@@ -8,7 +8,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
 
 // Switch this to your own contract address once deployed, for bookkeeping!
-// Example Contract Address on Goerli: 0xDBa03676a2fBb6711CB652beF5B7416A53c1421D
+// Example Contract Address on Goerli: 0x17EaD498653439eE2b79e36E4a5CFb2483Ad4929
 
 contract LotterySystem is VRFV2WrapperConsumerBase {
     // Event to emit when a Memo is created.
