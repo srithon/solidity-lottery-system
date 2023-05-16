@@ -15,20 +15,9 @@ async function printBalances(addresses) {
   }
 }
 
-// Logs the memos stored on-chain from coffee purchases.
-async function printMemos(memos) {
-  for (const memo of memos) {
-    const timestamp = memo.timestamp;
-    const tipper = memo.name;
-    const tipperAddress = memo.from;
-    const message = memo.message;
-    console.log(`At ${timestamp}, ${tipper} (${tipperAddress}) said: "${message}"`);
-  }
-}
-
 async function main() {
   // Get the example accounts we'll be working with.
-  const [owner, tipper, tipper2, tipper3] = await hre.ethers.getSigners();
+  const [owner, buyer, buyer2, buyer3] = await hre.ethers.getSigners();
 
   // We get the contract to deploy.
   const LotterySystem = await hre.ethers.getContractFactory("LotterySystem");
@@ -38,32 +27,27 @@ async function main() {
   await lotterySystem.deployed();
   console.log("LotterySystem deployed to:", lotterySystem.address);
 
-  // Check balances before the coffee purchase.
-  const addresses = [owner.address, tipper.address, lotterySystem.address];
+  // Check balances before the ticket purchases.
+  const addresses = [owner.address, buyer.address, lotterySystem.address];
   console.log("== start ==");
   await printBalances(addresses);
 
-  // Buy the owner a few coffees.
-  const tip = {value: hre.ethers.utils.parseEther("1")};
-  await lotterySystem.connect(tipper).buyTicketShares(tip);
-  await lotterySystem.connect(tipper2).buyTicketShares(tip);
-  await lotterySystem.connect(tipper3).buyTicketShares(tip);
+  // Buy some shares.
+  const numShares = {value: hre.ethers.utils.parseEther("1")};
+  await lotterySystem.connect(buyer).buyTicketShares(numShares);
+  await lotterySystem.connect(buyer2).buyTicketShares(numShares);
+  await lotterySystem.connect(buyer3).buyTicketShares(numShares);
 
-  // Check balances after the coffee purchase.
-  console.log("== bought coffee ==");
+  // Check balances after the ticket purchases.
+  console.log("== bought tickets ==");
   await printBalances(addresses);
 
-  // Withdraw.
+  // Pay out
   await lotterySystem.connect(owner).initiateLottery();
 
-  // Check balances after withdrawal.
+  // Check balances after lottery ends.
   console.log("== withdrawTips ==");
   await printBalances(addresses);
-
-  // Check out the memos.
-  console.log("== memos ==");
-  const memos = await lotterySystem.getMemos();
-  printMemos(memos);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
