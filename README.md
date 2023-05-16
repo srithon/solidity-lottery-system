@@ -1,4 +1,4 @@
-# Lottery System Ethereum
+# Solidity Lottery System
 
 This project is a smart contract designed to run on the Ethereum blockchain, implemented in Solidity. It models a Lottery system where users can buy lottery shares, with each share being equivalent to one wei. The contract allows the contract holder to initiate the lottery, and the contract will request a random number from [ChainLink VRF](https://docs.chain.link/vrf/v2/introduction) in order to ensure a fair selection process.
 
